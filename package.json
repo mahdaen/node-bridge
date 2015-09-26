@@ -1,37 +1,37 @@
 {
-    "name"         : "node-bridge",
-    "version"      : "1.0.0",
-    "description"  : "A Node Module and NPM bridge to unify the dependency management.",
-    "main"         : "index.js",
-    "scripts"      : {
-        "test" : "cd test && npm-bridge install"
-    },
-    "bin"          : {
-        "node-bridge" : "./lib/node-bridge.js",
-        "npm-bridge"  : "./lib/npm-bridge.js"
-    },
-    "repository"   : {
-        "type" : "git",
-        "url"  : "git+https://gitlab.com/stater/node-bridge.git"
-    },
-    "keywords"     : [
-        "dependency",
-        "management",
-        "npm",
-        "management",
-        "require",
-        "wrapper"
-    ],
-    "author"       : "Nanang Mahdaen El Agung <nanang@mahdaen.name> (http://mahdaen.name)",
-    "license"      : "MIT",
-    "bugs"         : {
-        "url" : "https://gitlab.com/stater/node-bridge/issues"
-    },
-    "homepage"     : "https://gitlab.com/stater/node-bridge#README",
-    "dependencies" : {
-        "cli-color" : "^1.0.0",
-        "fs-extra"  : "^0.24.0",
-        "glob"      : "^5.0.14",
-        "semver"    : "^5.0.3"
-    }
+  "name": "node-bridge",
+  "version": "1.1.0",
+  "description": "A Node Module and NPM bridge to unify the dependency management.",
+  "main": "index.js",
+  "scripts": {
+    "test": "cd test && npm-bridge install"
+  },
+  "bin": {
+    "node-bridge": "./lib/node-bridge.js",
+    "npm-bridge": "./lib/npm-bridge.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/stater/node-bridge.git"
+  },
+  "keywords": [
+    "dependency",
+    "management",
+    "npm",
+    "management",
+    "require",
+    "wrapper"
+  ],
+  "author": "Nanang Mahdaen El Agung <nanang@mahdaen.name> (http://mahdaen.name)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/stater/node-bridge/issues"
+  },
+  "homepage": "https://gitlab.com/stater/node-bridge#README",
+  "dependencies": {
+    "cli-color": "^1.0.0",
+    "fs-extra": "^0.24.0",
+    "glob": "^5.0.14",
+    "semver": "^5.0.3"
+  }
 }
