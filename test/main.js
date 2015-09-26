@@ -1,19 +1,25 @@
 "use strict";
 
-require('../index');
-
-var express = require('express');
+var express = require('express'),
+    inq     = require('inquirer');
 
 var app = express();
 
+console.log(process.argv);
+
 app.use(function ( req, res ) {
+    console.log('Sending answer...');
     res.end('Page loaded');
 });
 
-app.listen(8934, function () {
-    console.log(`Application started on port 8934`);
-});
+start('James');
 
-app.on('error', function ( err ) {
-    console.log(err);
-});
+function start ( name ) {
+    app.listen(8934, function () {
+        console.log(`Hello ${name}, your application started on port 8934`);
+    });
+
+    app.on('error', function ( err ) {
+        console.log(err);
+    });
+}

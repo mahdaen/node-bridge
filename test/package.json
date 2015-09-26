@@ -6,7 +6,8 @@
     "cli-color": "~1.0.0",
     "glob": "^5.0.14",
     "fs-extra": "^0.24.0",
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "inquirer": "^0.10.0"
   },
   "devDependencies": {
     "fs-extra": "^0.24.0"
