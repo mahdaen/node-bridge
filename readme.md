@@ -26,11 +26,12 @@ So when will we need to use **Node Bridge**?
 
 Doing **`npm install`** still will allow us to install the packages like usual, likewise the **`node app.js`** will work as usual.
 
-### Installing Node Bridge
+***
+### **Installing Node Bridge**
 
 To install **Node Bridge**, simply run
 ```bash
-npm install -g node-bridge
+$ npm install -g node-bridge
 ```
 
 and done! Node Bridge is ready to use.
