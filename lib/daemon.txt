@@ -1,3 +1,0 @@
-require('BRIDGE_PATH');
-process.argv = BRIDGE_ARGV;
-require('BRIDGE_APP');
