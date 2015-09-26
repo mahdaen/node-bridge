@@ -66,7 +66,7 @@ you to install those packages.
 ***
 ### **Removing Packages**
 
-#### **`npm-bridge remove[-r, rm] [packages] options`**
+#### **`npm-bridge remove[-r, rm] [packages...] [options...]`**
 
 To remove all packages, use option `all`. To remove the dependencies as well, use option `--auto`.
 
