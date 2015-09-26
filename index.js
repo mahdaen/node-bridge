@@ -2,6 +2,7 @@
 
 var Module = require('module'),
     orgreq = Module.prototype.require,
+    orgcom = Module.prototype._compile,
 
     core   = require('./lib/core.js'),
     oses   = require('os'),
@@ -18,9 +19,16 @@ var brdir = path.resolve(oses.homedir(), '.node-bridge'),
 var verbs = process.argv.indexOf('--debug') > -1 ? true : false;
 
 /* Bridge Constructor */
-var bridge = function ModuleBridge ( mods ) {
+var bridge = function ModuleBridge ( mods, resolve ) {
     assert(mods, 'missing path');
     assert(typeof mods === 'string', 'path must be a string');
+
+    // Resolver.
+    if ( resolve ) {
+        console.log('Brdiging resolver');
+
+        return bridgesolve(mods);
+    }
 
     var error, submod, rfile, foundpkg, result;
 
@@ -53,8 +61,26 @@ var bridge = function ModuleBridge ( mods ) {
     return result;
 }
 
+/* Bridge resolve */
+function bridgesolve ( mod ) {
+    var result;
+
+    try {
+        result = require.resolve(mod);
+    }
+    catch ( err ) {
+        result = bridgemod(mod, true);
+
+        if ( !result ) {
+            throw err;
+        }
+    }
+
+    return result;
+}
+
 /* Bridged Module Finder */
-function bridgemod ( mods ) {
+function bridgemod ( mods, resolve ) {
     // Create result variable and module group.
     var result, modcore, error;
 
@@ -68,7 +94,7 @@ function bridgemod ( mods ) {
         callermd; // Caller installed module.
 
     // Get caller filename
-    callfile = callerfile();
+    callfile = callerfile(5);
 
     // Splitting module name.
     modcore = mods.split('/');
@@ -97,9 +123,13 @@ function bridgemod ( mods ) {
     // If package found do require.
     if ( callermd ) {
         if ( modcore.length > 0 ) {
+            if ( resolve ) return path.resolve(callermd.path, callsubs);
+
             return bridgerun('bridged sub-module', mods, path.resolve(callermd.path, callsubs));
         }
         else {
+            if ( resolve ) return path.resolve(callermd.path);
+
             return bridgerun('bridged sub-module', mods, callermd.path);
         }
     }
@@ -138,7 +168,7 @@ function bridgerun ( type, name, path ) {
 /* Get caller file name */
 function callerfile ( lvl ) {
     var error = new Error,
-        stack = error.stack.split(/\s+at\s+/).slice(lvl + 2),
+        stack = error.stack.split(/\s+at\s+/).slice(lvl),
         name;
 
     try {
@@ -152,31 +182,55 @@ function callerfile ( lvl ) {
 }
 
 /* Get caller required module package */
+var last = '', lastpkg;
 function callerpkgs ( mod, from ) {
     var pkg, done, lost;
 
-    while ( !done && !lost ) {
-        try {
-            pkg = file.readJsonSync(path.resolve(from, 'package.json'));
+    /* If requested package is the last loaded package then use it */
+    if ( from === last ) {
+        pkg = lastpkg;
+    }
 
-            if ( pkg ) {
-                if ( (pkg.dependencies && pkg.dependencies[ mod ]) || (pkg.devDependencies && pkg.devDependencies[ mod ]) ) {
-                    done = true;
+    /* If not the recent loaded package, search for package.json */
+    else {
+        while ( !done && !lost ) {
+            try {
+                pkg = file.readJsonSync(path.resolve(from, 'package.json'));
+
+                if ( pkg ) {
+                    last    = from;
+                    lastpkg = pkg;
+                    done    = true;
+                }
+            }
+            catch ( err ) {
+                if ( from === oses.homedir() ) {
+                    lost = true;
                 }
                 else {
-                    return false;
+                    from = path.dirname(from);
                 }
             }
         }
-        catch ( err ) {
-            if ( from === oses.homedir() ) lost = true;
-
-            from = path.dirname(from);
-        }
     }
 
-    return pkg;
+    if ( pkg && pkg.dependencies && pkg.dependencies[ mod ] ) return pkg;
+    if ( pkg && pkg.devDependencies && pkg.devDependencies[ mod ] ) return pkg;
+
+    return;
 }
 
-/* Export the bridge */
+/* Exporting bridged resolver */
+global.__bridgedresolve = bridgesolve;
+
+/* Patching Require */
 Module.prototype.require = bridge;
+
+/* Patching Compiler */
+Module.prototype._compile = function ( content, filename ) {
+    // Replacing require.resolve.
+    content = content.replace(/require.resolve\(/g, '__bridgedresolve(');
+
+    // Calling compiler.
+    return orgcom.call(this, content, filename);
+}
