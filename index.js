@@ -2,30 +2,32 @@
 
 var Module = require('module'),
     orgreq = Module.prototype.require,
+
+    core   = require('./lib/core.js'),
     oses   = require('os'),
     path   = require('path'),
-    core   = require('./lib/core.js'),
+    file   = require('fs-extra'),
     assert = require('assert');
 
 // Create NodeBridge root dir path.
 var brdir = path.resolve(oses.homedir(), '.node-bridge'),
-    mddir = path.resolve(brdir, 'modules');
+    mddir = path.resolve(brdir, 'modules'),
+    modwd = process.cwd();
 
 /* Check verbose */
-var verbs = process.argv.indexOf('--verbose') > -1 ? true : false;
+var verbs = process.argv.indexOf('--debug') > -1 ? true : false;
 
 /* Bridge Constructor */
 var bridge = function ModuleBridge ( mods ) {
     assert(mods, 'missing path');
     assert(typeof mods === 'string', 'path must be a string');
 
-    var error, submod, rfile, foundpkg;
+    var error, submod, rfile, foundpkg, result;
 
     // Forward to original require if the path is relative.
     if ( /^[\/\.]+/.test(mods) ) {
-        if ( verbs ) console.log(`Relative module: ${mods}`);
-
-        return orgreq.call(this, mods);
+        // Call the module.
+        return bridgerun.call(this, 'relative', mods, mods);
     }
 
     // Check does the target path is a single module.
@@ -33,60 +35,108 @@ var bridge = function ModuleBridge ( mods ) {
         submod = mods.split('node_modules/');
         submod = path.resolve(mddir, submod[ submod.length - 1 ]);
 
-        // Forward require to brdige modules dir.
-        //return require(hasmod);
-        if ( verbs ) console.log(`Sub module: ${mods} loaded from ${submod}`);
-
-        return orgreq.call(this, submod);
+        // Call the module.
+        return bridgerun.call(this, 'relative', mods, mods);
     }
 
-    // Try get module from core module.
+    // Always try to load as core module.
+    try {
+        // Load module.
+        result = orgreq.call(this, mods);
+    }
+    catch ( err ) {
+        // Check does required module is installed.
+        result = bridgemod(mods);
+    }
+
+    // Return the result.
+    return result;
+}
+
+/* Bridged Module Finder */
+function bridgemod ( mods ) {
+    // Create result variable and module group.
+    var result, modcore, error;
+
+    /* Create variables. */
+    var callfile, // Caller file
+        callpath, // Caller dir
+        callname, // Module name
+        callsubs, // Sub module
+        callpkgs, // Caller package
+        callvers, // Caller require version
+        callermd; // Caller installed module.
+
+    // Get caller filename
+    callfile = callerfile();
+
+    // Splitting module name.
+    modcore = mods.split('/');
+
+    // Get module name.
+    callname = modcore[ 0 ];
+
+    // Remove name from splitted module name.
+    modcore.splice(0, 1);
+
+    // Get submodule.
+    callsubs = modcore.length > 0 ? modcore.join('/') : '';
+
+    // Get caller path
+    callpath = callfile ? path.dirname(callfile) : modwd;
+
+    // Get caller packages.
+    callpkgs = callerpkgs(callname, callpath);
+
+    // Get Caller required version.
+    callvers = callpkgs ? callpkgs.dependencies[ callname ] : '*';
+
+    // Check does package is installed.
+    callermd = core.mod(callname, callvers, true, true);
+
+    // If package found do require.
+    if ( callermd ) {
+        if ( modcore.length > 0 ) {
+            return bridgerun('bridged sub-module', mods, path.resolve(callermd.path, callsubs));
+        }
+        else {
+            return bridgerun('bridged sub-module', mods, callermd.path);
+        }
+    }
+
+    // If no package found, trow error.
+    else {
+        // Create new error.
+        error = new Error(`Bridged Module Error: Cannot find module '${mods}'`);
+
+        // Throw the error.
+        throw error;
+
+        // Return nothing.
+        return;
+    }
+}
+
+/* Require loader */
+function bridgerun ( type, name, path ) {
+    if ( verbs ) console.log(`Require ${type} module: ${name}`);
+
+    // Create result.
     var result;
 
     try {
-        result = orgreq.call(this, mods);
+        // Try to load the module.
+        result = orgreq.call(this, path);
     }
-    catch ( err ) {}
-
-    if ( result ) {
-        if ( verbs ) console.log(`Core module: ${mods}`);
-        return result;
+    catch ( err ) {
+        throw err;
     }
 
-    /* Get caller filename */
-    var fcal = getCallerFile(2, mods),
-
-        fdir,
-        mpkg,
-        exis;
-
-    if ( fcal ) {
-        fdir = path.dirname(fcal);
-
-        /* Get required module version */
-        mpkg = getCallerPkg(mods, fdir);
-
-        if ( mpkg ) {
-            /* Check does module is installed */
-            exis = core.mod(mods, mpkg.dependencies[ mods ], true, true);
-        }
-    }
-    else {
-        /* Check does module is installed */
-        exis = core.mod(mods, '*', true, true);
-    }
-
-    if ( exis ) {
-        if ( verbs ) console.log('Bridged module: ' + fcal);
-
-        return orgreq.call(this, exis.path);
-    }
-
-    return orgreq.call(this, mods);
+    return result;
 }
 
 /* Get caller file name */
-function getCallerFile ( lvl, mod ) {
+function callerfile ( lvl ) {
     var error = new Error,
         stack = error.stack.split(/\s+at\s+/).slice(lvl + 2),
         name;
@@ -102,15 +152,20 @@ function getCallerFile ( lvl, mod ) {
 }
 
 /* Get caller required module package */
-function getCallerPkg ( mod, from ) {
+function callerpkgs ( mod, from ) {
     var pkg, done, lost;
 
     while ( !done && !lost ) {
         try {
-            pkg = require(path.resolve(from, 'package.json'));
+            pkg = file.readJsonSync(path.resolve(from, 'package.json'));
 
-            if ( (pkg.dependencies && pkg.dependencies[ mod ]) || (pkg.devDependencies && pkg.devDependencies[ mod ]) ) {
-                done = true;
+            if ( pkg ) {
+                if ( (pkg.dependencies && pkg.dependencies[ mod ]) || (pkg.devDependencies && pkg.devDependencies[ mod ]) ) {
+                    done = true;
+                }
+                else {
+                    return false;
+                }
             }
         }
         catch ( err ) {
