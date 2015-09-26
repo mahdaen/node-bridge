@@ -1,7 +1,13 @@
 {
   "name": "node-bridge-test",
   "version": "1.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "singclude": "^1.4.7",
+    "cli-color": "~1.0.0",
+    "glob": "^5.0.14",
+    "fs-extra": "^0.24.0",
+    "express": "^4.13.3"
+  },
   "devDependencies": {
     "fs-extra": "^0.24.0"
   }
