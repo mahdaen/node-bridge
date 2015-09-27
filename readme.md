@@ -70,6 +70,8 @@ you to install those packages.
 
 #### **`npm-bridge update[-u, u] [packages...] [options...]`**
 
+To check updates form installed packages, use **`npm-bridge check-updates`**. Will show the availabe updates.
+
 ***
 ### **Removing Packages**
 
