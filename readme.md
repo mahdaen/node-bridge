@@ -100,6 +100,34 @@ $ npm-bridge ls express singclude
 ```
 
 ***
+### **Linking Installed Packages**
+
+#### **`npm-bridge link[ln] [packages...]`**
+
+**Example**
+```bash
+// Link all dependencies on package.json
+$ npm-bridge link
+
+// Link specific packages
+$ npm-bridge ln express@^4.0.0 singclude
+```
+
+***
+### **Unlinking Installed Packages**
+
+#### **`npm-bridge unlink[rln] [packages...]`**
+
+**Example**
+```bash
+// Unlink all dependencies on package.json
+$ npm-bridge unlink
+
+// Unlink specific packages. Don't use version when unlinking.
+$ npm-bridge rln express singclude
+```
+
+***
 ### **Running App**
 
 We must use **`node-bridge [app]`** instead **`node [app]`** to run applications, and makes the **`require`** works.

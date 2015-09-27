@@ -19,16 +19,9 @@ var brdir = path.resolve(oses.homedir(), '.node-bridge'),
 var verbs = process.argv.indexOf('--debug') > -1 ? true : false;
 
 /* Bridge Constructor */
-var bridge = function ModuleBridge ( mods, resolve ) {
+var bridge = function ModuleBridge ( mods ) {
     assert(mods, 'missing path');
     assert(typeof mods === 'string', 'path must be a string');
-
-    // Resolver.
-    if ( resolve ) {
-        console.log('Brdiging resolver');
-
-        return bridgesolve(mods);
-    }
 
     var error, submod, rfile, foundpkg, result;
 
