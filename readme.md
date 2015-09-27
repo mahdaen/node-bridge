@@ -70,7 +70,31 @@ you to install those packages.
 
 #### **`npm-bridge update[-u, u] [packages...] [options...]`**
 
-To check updates form installed packages, use **`npm-bridge check-updates`**. Will show the availabe updates.
+**Example**
+```bash
+// Update all project dependencies.
+$ npm-bridge update
+
+// Update specific packages.
+$ npm-bridge update express
+$ npm-bridge update sails@^0.11.0
+
+// Update and save to project.json
+$ npm-bridge update --save singclude@^1.0.0
+
+```
+
+To check updates for the installed packages, use **`npm-bridge check-updates`**.
+Add **`--install`** to install the available updates.
+
+**Example**
+```bash
+// Only check for available updates.
+$ npm-bridge check-updates
+
+// Check and install the updates.
+$ npm-bridge check-updates --install
+```
 
 ***
 ### **Removing Packages**
