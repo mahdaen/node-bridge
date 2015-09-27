@@ -22,9 +22,16 @@ So when will we need to use **Node Bridge**?
 - When we don't want to re-install packages for every projects.
 - When we don't want to see **`node_modules`** folder anymore.
 - When we want to do quick update. Update one package, all projects will updated as well since they're using one dependency.
+- When we want to load sub-modules without **`pkgname/node_modules/sub-pkg-name`**
 - When ...
 
 Doing **`npm install`** still will allow us to install the packages like usual, likewise the **`node app.js`** will work as usual.
+
+***
+### **Tested Apps**
+
+- **ExpressJS** apps. **`node app.js`** works fine (with **`npm-bridge link`**), **`node-bridge app.js`** also works (without **`npm-bridge link`**).
+- **SailsJS** apps. **`node app.js`** works fine (with **`npm-bridge link`**), **`node-bridge app.js`** also works (with **`npm-bridge link grunt`**).
 
 ***
 ### **Installing Node Bridge**

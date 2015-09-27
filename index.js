@@ -109,6 +109,7 @@ function bridgemod ( mods, resolve ) {
 
     // Get Caller required version.
     callvers = callpkgs ? callpkgs.dependencies[ callname ] : '*';
+    if ( callvers.match(/[a-zA-Z\/]+/g) ) callvers = '*';
 
     // Check does package is installed.
     callermd = core.mod(callname, callvers, true, true);
