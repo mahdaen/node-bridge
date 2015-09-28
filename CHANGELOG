@@ -1,0 +1,6 @@
+v1.5.2 
+    - [BUG FIXES]       Fixing installing project dependencies replacing modules dependents.
+    - [IMPROVEMENT]     Secure removal, ensure packages are not removed unless no another packages that depend on that.
+    
+v1.5.1 Born
+    - Initial Release
