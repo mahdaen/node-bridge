@@ -2,10 +2,11 @@
     "name"            : "node-bridge-test",
     "version"         : "1.0.0",
     "dependencies"    : {
-        "singclude" : "^1.0.0",
-        "glob"      : "^5.0.0",
-        "express"   : "^4.0.0",
-        "native-js" : "*"
+        "singclude"    : "^1.0.0",
+        "glob"         : "^5.0.0",
+        "express"      : "^4.0.0",
+        "native-js"    : "*",
+        "content-type" : "^1.0.1"
     },
     "devDependencies" : {
         "fs-extra" : "^0.24.0"
