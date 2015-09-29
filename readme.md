@@ -48,6 +48,17 @@ and done! Node Bridge is ready to use.
 
 #### **`npm-bridge install[-i, i] [packages...][options...]`**
 
+Install one or more packages, from inside or outside project tree.
+
+Doing **`npm-bridge install`** will check does the packages is using the latest version. If new updates is available, Node Bridge will inform
+you to install those packages.
+
+#### **Options**
+
+* **`--save | -s`** - Save installed packages to project **`package.json`**
+* **`--save-dev | -sd`** - Save installed pacakges to project **`package.json`** as dev-dependencies.
+* **`--force | -f`** - Force install packages, no matter its already installed or not.
+
 **Example**
 ```bash
 // Install all project dependencies.
@@ -62,13 +73,17 @@ $ npm-bridge install --save singclude@^1.0.0
 
 ```
 
-Doing **`npm-bridge install`** will check does the packages is using the latest version. If new updates is available, Node Bridge will inform
-you to install those packages.
-
 ***
 ### **Updating Packages**
 
 #### **`npm-bridge update[-u, u] [packages...] [options...]`**
+
+Update one or more packages, from inside or outside project tree.
+
+#### **Options**
+
+* **`--save | -s`** - Save updated version to project **`package.json`**.
+* **`--save-dev | -sd`** - Save updated version to project **`package.json`** as dev-dependencies.
 
 **Example**
 ```bash
@@ -84,8 +99,8 @@ $ npm-bridge update --save singclude@^1.0.0
 
 ```
 
-To check updates for the installed packages, use **`npm-bridge check-updates`**.
-Add **`--install`** to install the available updates.
+To check updates for all installed packages (outside project tree), use **`npm-bridge check-updates`**.
+Use **`npm-bridge check-updates --install`** to check the updates and install the available updates. Running this command on huge dependencies will take a time since it's check the each updates.
 
 **Example**
 ```bash
@@ -101,7 +116,15 @@ $ npm-bridge check-updates --install
 
 #### **`npm-bridge remove[-r, rm] [packages...] [options...]`**
 
-To remove all packages, use option `all`. To remove the dependencies as well, use option `--auto`.
+Remove one or more packages. Packages removal is secured. So, the packages that still have dependents wont removed, unless you add **`--force`** option to force remove packages, no matter still has dependents or not.
+
+#### **Options**
+
+* **`all`** - Remove all installed packages ( not only the project dependencies ).
+* **`--save | -s`** - Save removed packages to project **`package.json`** as dev-dependencies.
+* **`--save-dev | -sd`** - Save removed packages to project **`package.json`**.
+* **`--force`** - Force remove packages.
+* **`--auto`** - Auto remove the dependencies tree (recursively).
 
 **Example**
 ```bash
@@ -135,6 +158,8 @@ $ npm-bridge ls express singclude
 ***
 ### **Linking Installed Packages**
 
+Link packages will create symlinks to installed packages, also registering the project as dependent of the packages.
+
 #### **`npm-bridge link[ln] [packages...]`**
 
 **Example**
@@ -148,6 +173,8 @@ $ npm-bridge ln express@^4.0.0 singclude
 
 ***
 ### **Unlinking Installed Packages**
+
+Unlink packages will remove links from packages, also remove thep project from packages dependents.
 
 #### **`npm-bridge unlink[rln] [packages...]`**
 
@@ -163,7 +190,7 @@ $ npm-bridge rln express singclude
 ***
 ### **Running App**
 
-We must use **`node-bridge [app]`** instead **`node [app]`** to run applications, and makes the **`require`** works.
+We must use **`node-bridge [app]`** instead **`node [app]`** to run applications without linking (adding to local **`node_modules`**) dependencies, and makes the **`require`** works.
 
 If we want to run the app as background process, we need to have **`PM2`** installed globally.
 
