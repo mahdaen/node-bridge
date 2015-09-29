@@ -1,6 +1,6 @@
 {
   "name": "node-bridge",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "A Node Module and NPM bridge to unify the dependency management.",
   "main": "index.js",
   "scripts": {
