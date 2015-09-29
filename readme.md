@@ -188,6 +188,38 @@ $ npm-bridge rln express singclude
 ```
 
 ***
+### **Linking Installed Packages Binary**
+
+#### **`npm-bridge link-bin[lb] [packages...]`**
+
+Link installed packages binary **`bin`** to **`/usr/local/bin`** to makes it executable gobally.
+
+**Example**
+```bash
+// Link single package binary with specific version
+$ npm-bridge link-bin swig@^1.0.0
+
+// Link multiple package binary.
+$ npm-bridge lb swig@^1.0.0 semver pm2
+```
+
+***
+### **Unlinking Installed Packages Binary**
+
+#### **`npm-bridge unlink-bin[ulb] [packages...]`**
+
+Remove linked packages binary from **`/usr/local/bin`** to makes it not executable gobally.
+
+**Example**
+```bash
+// Unlink single package binary with specific version
+$ npm-bridge unlink-bin swig@^1.0.0
+
+// Unlink multiple package binary.
+$ npm-bridge ulb swig@^1.0.0 semver pm2
+```
+
+***
 ### **Running App**
 
 We must use **`node-bridge [app]`** instead **`node [app]`** to run applications without linking (adding to local **`node_modules`**) dependencies, and makes the **`require`** works.
@@ -202,15 +234,24 @@ $ node-bridge app.js
 // Run with arguments
 $ node-bridge app.js --port=8000 --host=localhost --verbose
 
-// Run as daemon
+// Run as daemon with arguments
 $ node-bridge --daemon app.js --port=8932
 
 // Stop daemon
-$ node-bridge stop
+$ node-bridge stop app.js
 ```
 
 #### **Notes**
 
 * **Node Bridge** requires NodeJS v4x (or ES6) to works.
+* **Daemon Mode** requires PM2 installed globally.
 * Be carefull when removing packages, since some packages also using that.
 * **Node Bridge** still need more work (e.g: performance). So use with your own risk if you want to use the module.
+
+
+If you have packages installed with version **`< 1.6.0`**, we prefer to reinstall them (with **`--force`** or remove them first) to ensure everything works properly as v1.6.0 release.
+
+***
+#### **Thanks To**
+
+* [**Aurélio A. Heckert**](https://gitlab.com/u/aurium) for the contribution and suggestions.

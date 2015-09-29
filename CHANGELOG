@@ -1,6 +1,10 @@
-v1.5.2 
-    - [BUG FIXES]       Fixing installing project dependencies replacing modules dependents.
-    - [IMPROVEMENT]     Secure removal, ensure packages are not removed unless no another packages that depend on that.
-    
-v1.5.1 Born
+v1.6.0 - Menjangan ( Sept 29, 2015 )
+    - [BUG FIXES] Fixing installing project dependencies replacing modules dependents.
+    - [BUG FIXES] Fixing error when installing packages that has infinite dependencies.
+    - [BUG FIXES] Fixing issue when running node-bridge --daemon
+
+    - [FTR IMPRO] Added secure removal, ensure packages are not removed unless no another packages that depend on that.
+    - [FTR IMPRO] Added ability to link the installed module binary to /usr/local/bin (Mac & Linux).
+
+v1.5.1 - Ndukuh
     - Initial Release
