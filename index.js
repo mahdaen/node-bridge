@@ -112,7 +112,7 @@ function bridgemod ( mods, resolve ) {
     if ( callvers.match(/[a-zA-Z\/]+/g) ) callvers = '*';
 
     // Check does package is installed.
-    callermd = core.mod(callname, callvers, true, true);
+    callermd = core.get(callname, callvers, true, true);
 
     // If package found do require.
     if ( callermd ) {
