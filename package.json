@@ -1,20 +1,20 @@
 {
-    "name"         : "node-bridge",
-    "version"      : "1.6.3",
-    "description"  : "A simple Node Package Manager to unify dependency management.",
-    "main"         : "index.js",
-    "scripts"      : {
+    "name"            : "node-bridge",
+    "version"         : "1.6.3",
+    "description"     : "A simple Node Package Manager to unify dependency management.",
+    "main"            : "index.js",
+    "scripts"         : {
         "test" : "cd test && npm-bridge install"
     },
-    "bin"          : {
+    "bin"             : {
         "node-bridge" : "./bin/node-bridge.js",
         "npm-bridge"  : "./bin/npm-bridge.js"
     },
-    "repository"   : {
+    "repository"      : {
         "type" : "git",
         "url"  : "git+https://gitlab.com/stater/node-bridge.git"
     },
-    "keywords"     : [
+    "keywords"        : [
         "dependency",
         "management",
         "npm",
@@ -22,16 +22,19 @@
         "require",
         "wrapper"
     ],
-    "author"       : "Nanang Mahdaen El Agung <nanang@mahdaen.name> (http://mahdaen.name)",
-    "license"      : "MIT",
-    "bugs"         : {
+    "author"          : "Nanang Mahdaen El Agung <nanang@mahdaen.name> (http://mahdaen.name)",
+    "license"         : "MIT",
+    "bugs"            : {
         "url" : "https://gitlab.com/stater/node-bridge/issues"
     },
-    "homepage"     : "https://gitlab.com/stater/node-bridge#README",
-    "dependencies" : {
+    "homepage"        : "https://gitlab.com/stater/node-bridge#README",
+    "dependencies"    : {
         "cli-color" : "^1.0.0",
         "fs-extra"  : "^0.24.0",
         "glob"      : "^5.0.14",
         "semver"    : "^5.0.3"
+    },
+    "devDependencies" : {
+        "mocha" : "^2.3.0"
     }
 }

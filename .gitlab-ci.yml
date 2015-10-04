@@ -1,0 +1,11 @@
+types:
+  - test
+
+staging:
+  type: test
+  script:
+    - npm install
+    - node_modules/.bin/mocha -t 10000 test/test.js
+  only:
+    - migration
+    - master
