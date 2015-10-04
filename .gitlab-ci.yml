@@ -4,7 +4,7 @@ types:
 staging:
   type: test
   script:
-    - git checkout migration
+    - git checkout master
     - git pull
     - npm install
     - mocha -t 10000 test/test.js
