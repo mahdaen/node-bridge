@@ -19,9 +19,32 @@ bridge.rmdir([ bridge.resolve(usrscope, '.node-bridge'), bridge.resolve(sysscope
 
 // Main Bridge Test.
 describe('Bridge [ class ]', function () {
+    /* Get Updated Version Test */
+    describe('\r\n    ' + bridge.colorize([ 'yellow', 'static' ], [ 'green', 'getupd()' ], [ 'cyan', 'Get package updated version.' ]), function () {
+        it('Should throw error if no argument defined.', function ( done ) {
+            try {
+                bridge.getupd();
+            }
+            catch ( err ) {
+                done();
+            }
+        });
+        it('Should throw error for invalid argument type.', function ( done ) {
+            try {
+                bridge.getupd([], 'foo');
+            }
+            catch ( err ) {
+                done();
+            }
+        });
+        it('Should return the latest version.', function ( done ) {
+            let vr = bridge.getupd('native-js', { twd : usrscope });
+            done();
+        });
+    });
+
     /* Link Bin Test */
     describe('\r\n    ' + bridge.colorize([ 'yellow', 'static' ], [ 'green', 'linkbin()' ], [ 'cyan', 'Create executable file for package binary.' ]), function () {
-
         it('Should throw error if no argument defined.', function ( done ) {
             try {
                 bridge.linkbin();
