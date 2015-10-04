@@ -20,6 +20,36 @@ bridge.rmdir([ bridge.resolve(usrscope, '.node-bridge'), bridge.resolve(sysscope
 // Main Bridge Test.
 describe('Bridge [ class ]', function () {
     /* Get Updated Version Test */
+    describe('\r\n    ' + bridge.colorize([ 'yellow', 'static' ], [ 'green', 'getpkg()' ], [ 'cyan', 'Get package information from registry.' ]), function () {
+        it('Should throw error if no argument defined.', function ( done ) {
+            try {
+                bridge.getpkg();
+            }
+            catch ( err ) {
+                done();
+            }
+        });
+        it('Should throw error for invalid argument type.', function ( done ) {
+            try {
+                bridge.getpkg([], {}, 'foo');
+            }
+            catch ( err ) {
+                done();
+            }
+        });
+        it('Should return the package information.', function ( done ) {
+            let pkg = bridge.getpkg('native-js', '^1.0.0', {
+                'native-js' : {
+                    '1.0.0' : { name : 'native-js', version : '1.0.0' },
+                    '1.2.0' : { name : 'native-js', version : '1.2.0' }
+                }
+            });
+
+            if ( pkg.version === '1.2.0' ) done();
+        });
+    });
+
+    /* Get Updated Version Test */
     describe('\r\n    ' + bridge.colorize([ 'yellow', 'static' ], [ 'green', 'getupd()' ], [ 'cyan', 'Get package updated version.' ]), function () {
         it('Should throw error if no argument defined.', function ( done ) {
             try {
