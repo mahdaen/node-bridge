@@ -1,10 +1,9 @@
 types:
   - test
 
-staging:
+build-test:
   type: test
   script:
-    - git checkout master
     - git pull
     - npm install
     - mocha -t 10000 test/test.js
