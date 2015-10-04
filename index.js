@@ -4,7 +4,7 @@ var Module = require('module'),
     orgreq = Module.prototype.require,
     orgcom = Module.prototype._compile,
 
-    core   = require('./lib/core.js'),
+    core   = require('./lib/lib-core.js'),
     oses   = require('os'),
     path   = require('path'),
     file   = require('fs-extra'),

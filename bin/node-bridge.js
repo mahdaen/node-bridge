@@ -2,8 +2,10 @@
 
 'use strict';
 
+console.log(process.argv);
+
 /* Loading core modules */
-var loop = require('./looper'),
+var loop = require('../lib/util-looper'),
     exec = require('child_process').spawn,
     oses = require('os'),
     file = require('fs-extra'),

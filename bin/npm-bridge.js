@@ -3,9 +3,9 @@
 'use strict';
 
 /* Loading core modules */
-var coms = require('./cli-parser'),
-    loop = require('./looper'),
-    core = require('./core'),
+var clis = require('../lib/util-cli'),
+    loop = require('../lib/util-looper'),
+    core = require('../lib/lib-core'),
     file = require('fs-extra'),
     bash = require('child_process'),
     path = require('path'),
@@ -16,7 +16,7 @@ var cwd = process.cwd(),
     nwd = path.resolve(cwd, 'node_modules');
 
 // Create CLI instance.
-var cli = new coms({
+var cli = new clis.Helper().setup({
     name    : 'NPM Bridge',
     info    : 'The unified dependency management, gaining the power of NPM.',
     version : require('../package.json').version,
@@ -40,7 +40,7 @@ var cli = new coms({
     })
     .add('cmd', {
         name  : 'remove',
-        alias : 'rem, -r',
+        alias : 'rm, -r',
         about : 'Remove one or more packages, also remove by read the package.sjon',
         usage : `${colr.greenBright('npm-bridge')} ${colr.yellow('remove')} [packages...] [options...]`,
 
@@ -90,6 +90,11 @@ var cli = new coms({
     })
 
     // Add options
+    .add('opt', {
+        name  : '--bin',
+        alias : '-b',
+        about : 'Install packages and add the binary to the executable path.'
+    })
     .add('opt', {
         name  : '--save',
         alias : '-s',

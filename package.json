@@ -7,8 +7,8 @@
         "test" : "cd test && npm-bridge install"
     },
     "bin"          : {
-        "node-bridge" : "./lib/node-bridge.js",
-        "npm-bridge"  : "./lib/npm-bridge.js"
+        "node-bridge" : "./bin/node-bridge.js",
+        "npm-bridge"  : "./bin/npm-bridge.js"
     },
     "repository"   : {
         "type" : "git",

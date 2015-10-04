@@ -5,7 +5,7 @@
     "singclude": "^1.0.0",
     "glob": "^5.0.15",
     "express": "^4.0.0",
-    "native-js": "*",
+    "native-js": "^1.2.0",
     "content-type": "^1.0.1"
   },
   "devDependencies": {
