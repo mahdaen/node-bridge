@@ -23,6 +23,12 @@ var bridge = function ModuleBridge ( mods ) {
     assert(mods, 'missing path');
     assert(typeof mods === 'string', 'path must be a string');
 
+    if ( mods === '--bin-bridge--' ) {
+        return function bridge ( name, version, bin ) {
+            console.log(`Bridging binary ${name}@${version} using ${bin}`);
+        }
+    }
+
     var error, submod, rfile, foundpkg, result;
 
     // Forward to original require if the path is relative.

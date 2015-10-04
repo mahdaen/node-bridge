@@ -19,6 +19,210 @@ bridge.rmdir([ bridge.resolve(usrscope, '.node-bridge'), bridge.resolve(sysscope
 
 // Main Bridge Test.
 describe('Bridge [ class ]', function () {
+    /* Link Bin Test */
+    describe('\r\n    ' + bridge.colorize([ 'yellow', 'static' ], [ 'green', 'linkbin()' ], [ 'cyan', 'Create executable file for package binary.' ]), function () {
+
+        it('Should throw error if no argument defined.', function ( done ) {
+            try {
+                bridge.linkbin();
+            }
+            catch ( err ) {
+                done();
+            }
+        });
+        it('Should throw error for invalid argument type.', function ( done ) {
+            try {
+                bridge.linkbin('foo');
+            }
+            catch ( err ) {
+                done();
+            }
+        });
+        it('Should throw error if first argument is object, but do not contains valid properties.', function ( done ) {
+            try {
+                bridge.linkbin({
+                    foo : '',
+                    bar : ''
+                });
+            }
+            catch ( err ) {
+                done();
+            }
+        });
+        it('Should create executable file.', function ( done ) {
+            bridge.linkbin({
+                name    : 'semver',
+                version : '^2.1.0',
+                bin     : {
+                    semver : './bin/semver',
+                    versem : './bin/versem'
+                }
+            }, bridge.resolve(usrscope, 'bin'));
+
+            done();
+        });
+        it('Should remove executable file.', function ( done ) {
+            bridge.linkbin({
+                name    : 'semver',
+                version : '^2.1.0',
+                bin     : {
+                    semver : './bin/semver',
+                    versem : './bin/versem'
+                }
+            }, bridge.resolve(usrscope, 'bin'), true);
+
+            done();
+
+            bridge.rmdir(bridge.resolve(usrscope, 'bin'));
+        });
+    });
+
+    /* Link Dir Test */
+    describe('\r\n    ' + bridge.colorize([ 'yellow', 'static' ], [ 'green', 'linkdir()' ], [ 'cyan', 'Create symlink for file/dir.' ]), function () {
+        // Create new file and folder for removal test.
+        util.file.ensureDirSync(bridge.resolve(tmpscope, 'lndtest1'));
+        util.file.ensureDirSync(bridge.resolve(tmpscope, 'lndtest2'));
+        util.file.ensureFileSync(bridge.resolve(tmpscope, 'lndtest1.json'));
+        util.file.ensureFileSync(bridge.resolve(tmpscope, 'lndtest2.json'));
+
+        it('Should throw error if no argument defined.', function ( done ) {
+            try {
+                bridge.linkdir();
+            }
+            catch ( err ) {
+                done();
+            }
+        });
+        it('Should throw error for invalid argument type.', function ( done ) {
+            try {
+                bridge.linkdir([]);
+            }
+            catch ( err ) {
+                done();
+            }
+        });
+        it('Should throw error for multiple link but with invalid path.', function ( done ) {
+            try {
+                bridge.linkdir({ c : {}, d : null });
+            }
+            catch ( err ) {
+                done();
+            }
+        });
+        it('Should throw error if source file/dir not exist.', function ( done ) {
+            try {
+                bridge.linkdir(bridge.resolve(tmpscope, 'nullex'), bridge.resolve(tmpscope, 'etarget'));
+            }
+            catch ( err ) {
+                done();
+            }
+        });
+        it('Should link directory.', function ( done ) {
+            bridge.linkdir(bridge.resolve(tmpscope, 'lndtest1'), bridge.resolve(tmpscope, 'lndget1'));
+            done();
+        });
+        it('Should link file.', function ( done ) {
+            bridge.linkdir(bridge.resolve(tmpscope, 'lndtest1.json'), bridge.resolve(tmpscope, 'lndget1.json'));
+            done();
+        });
+        it('Shoud link multiple directory.', function ( done ) {
+            let obj = {};
+
+            obj[ bridge.resolve(tmpscope, 'lndtest1') ] = bridge.resolve(tmpscope, 'lndml1');
+            obj[ bridge.resolve(tmpscope, 'lndtest2') ] = bridge.resolve(tmpscope, 'lndml2');
+
+            bridge.linkdir(obj);
+
+            done();
+        });
+        it('Shoud link multiple file.', function ( done ) {
+            let obj = {};
+
+            obj[ bridge.resolve(tmpscope, 'lndtest1.json') ] = bridge.resolve(tmpscope, 'lndml1.json');
+            obj[ bridge.resolve(tmpscope, 'lndtest2.json') ] = bridge.resolve(tmpscope, 'lndml2.json');
+
+            bridge.linkdir(obj);
+
+            done();
+
+            // Cleanup files and dirs for last test.
+            bridge.rmdir(bridge.resolve(tmpscope, 'lnd*'));
+        });
+    });
+
+    /* Remove File/Folder Test */
+    describe('\r\n    ' + bridge.colorize([ 'yellow', 'static' ], [ 'green', 'cpdir()' ], [ 'cyan', 'Copy file/directory.' ]), function () {
+        // Create new file and folder for removal test.
+        util.file.ensureDirSync(bridge.resolve(tmpscope, 'cptest1'));
+        util.file.ensureDirSync(bridge.resolve(tmpscope, 'cptest2'));
+        util.file.ensureFileSync(bridge.resolve(tmpscope, 'cptest1.json'));
+        util.file.ensureFileSync(bridge.resolve(tmpscope, 'cptest2.json'));
+
+        it('Should throw error if no argument defined.', function ( done ) {
+            try {
+                bridge.cpdir();
+            }
+            catch ( err ) {
+                done();
+            }
+        });
+        it('Should throw error for invalid argument type.', function ( done ) {
+            try {
+                bridge.cpdir([]);
+            }
+            catch ( err ) {
+                done();
+            }
+        });
+        it('Should throw error for multiple copy but with invalid path.', function ( done ) {
+            try {
+                bridge.cpdir({ c : {}, d : null });
+            }
+            catch ( err ) {
+                done();
+            }
+        });
+        it('Should throw error if source file/dir not exist.', function ( done ) {
+            try {
+                bridge.cpdir(bridge.resolve(tmpscope, 'nullex'), bridge.resolve(tmpscope, 'etarget'));
+            }
+            catch ( err ) {
+                done();
+            }
+        });
+        it('Should copy directory.', function ( done ) {
+            bridge.cpdir(bridge.resolve(tmpscope, 'cptest1'), bridge.resolve(tmpscope, 'cpget1'));
+            done();
+        });
+        it('Should copy file.', function ( done ) {
+            bridge.cpdir(bridge.resolve(tmpscope, 'cptest1.json'), bridge.resolve(tmpscope, 'cpget1.json'));
+            done();
+        });
+        it('Shoud copy multiple directory.', function ( done ) {
+            let obj = {};
+
+            obj[ bridge.resolve(tmpscope, 'cptest1') ] = bridge.resolve(tmpscope, 'cpml1');
+            obj[ bridge.resolve(tmpscope, 'cptest2') ] = bridge.resolve(tmpscope, 'cpml2');
+
+            bridge.cpdir(obj);
+
+            done();
+        });
+        it('Shoud copy multiple file.', function ( done ) {
+            let obj = {};
+
+            obj[ bridge.resolve(tmpscope, 'cptest1.json') ] = bridge.resolve(tmpscope, 'cpml1.json');
+            obj[ bridge.resolve(tmpscope, 'cptest2.json') ] = bridge.resolve(tmpscope, 'cpml2.json');
+
+            bridge.cpdir(obj);
+
+            done();
+
+            // Cleanup files and dirs for last test.
+            bridge.rmdir(bridge.resolve(tmpscope, 'cp*'));
+        });
+    });
+
     /* Remove File/Folder Test */
     describe('\r\n    ' + bridge.colorize([ 'yellow', 'static' ], [ 'green', 'rmdir()' ], [ 'cyan', 'Remove file/directory.' ]), function () {
         // Create new file and folder for removal test.
