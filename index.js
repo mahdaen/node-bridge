@@ -4,7 +4,7 @@ var Module = require('module'),
     orgreq = Module.prototype.require,
     orgcom = Module.prototype._compile,
 
-    core   = require('./lib/core.js'),
+    core   = require('./lib/lib-core.js'),
     oses   = require('os'),
     path   = require('path'),
     file   = require('fs-extra'),
@@ -22,6 +22,12 @@ var verbs = process.argv.indexOf('--debug') > -1 ? true : false;
 var bridge = function ModuleBridge ( mods ) {
     assert(mods, 'missing path');
     assert(typeof mods === 'string', 'path must be a string');
+
+    if ( mods === '--bin-bridge--' ) {
+        return function bridge ( name, version, bin ) {
+            console.log(`Bridging binary ${name}@${version} using ${bin}`);
+        }
+    }
 
     var error, submod, rfile, foundpkg, result;
 
@@ -112,7 +118,7 @@ function bridgemod ( mods, resolve ) {
     if ( callvers.match(/[a-zA-Z\/]+/g) ) callvers = '*';
 
     // Check does package is installed.
-    callermd = core.mod(callname, callvers, true, true);
+    callermd = core.get(callname, callvers, true, true);
 
     // If package found do require.
     if ( callermd ) {

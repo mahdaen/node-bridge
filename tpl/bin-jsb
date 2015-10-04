@@ -1,0 +1,2 @@
+#! /usr/bin/env node
+require('%%BRIDGEPATH%%'); var bridge = require('--bin-bridge--'), BIN_VERSION = '%%VERSION%%'; bridge('%%NAME%%', (process.env.BIN_VERSION || BIN_VERSION), '%%BINPATH%%');
