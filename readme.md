@@ -1,4 +1,11 @@
 ## **Node Bridge**
+
+[![version](https://img.shields.io/npm/v/node-bridge.svg)](https://www.npmjs.com/package/node-bridge)
+[![build status](https://gitlab.com/ci/projects/9827/status.png?ref=master)](https://gitlab.com/ci/projects/9827?ref=master)
+[![npm downloads](https://img.shields.io/npm/dt/node-bridge.svg)](https://www.npmjs.com/package/node-bridge)
+[![dependencies](https://david-dm.org/mahdaen/node-bridge.svg)]()
+[![license](https://img.shields.io/npm/l/node-bridge.svg)](https://www.npmjs.com/package/node-bridge)
+
 **Node Bridge** is a NodeJS Module and NPM Package dependency management. Node Bridge store the packages in one location, and well versioned.
 
 ### **Why?**
