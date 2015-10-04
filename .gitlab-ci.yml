@@ -6,4 +6,4 @@ staging:
   script:
     - git checkout migration
     - npm install
-    - node_modules/.bin/mocha -t 10000 test/test.js
+    - mocha -t 10000 test/test.js
